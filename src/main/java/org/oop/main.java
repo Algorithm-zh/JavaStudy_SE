@@ -29,6 +29,12 @@ public class main {
         Person p2 = new Student(18, "lisi", 100);
         p2.test();
 
+        Vehicle vehicle = new Car();
+        Car car = new Car();
+        Car.number = 10;//静态字段要用类名访问
+        car.number = 12;//如果用实例访问，编译器会自动给他转为类名
+
+
 
     }
 }

@@ -12,4 +12,6 @@ public class Car implements Vehicle{
     public void running() {
 
     }
+
+    public static int number;
 }

@@ -34,5 +34,14 @@ public sealed class Student extends Person permits Teacher{
     @Override
     public void run() {
         System.out.println("运行");
+        Hello hello = new Hello();
+        hello.hi();
+    }
+
+    public class Hello{
+        public void hi(){
+            score = 100;
+            System.out.println("我是内部类");
+        }
     }
 }

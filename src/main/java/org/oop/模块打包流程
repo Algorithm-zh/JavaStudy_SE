@@ -1,0 +1,23 @@
+一、标准流程（推荐方式）
+1. 编译模块
+javac -d bin src/module-info.java org/oop/*.java
+输出：
+bin/module-info.class
+其他 class 文件保持包结构编译到 bin/
+
+2. 打包成模块化 JAR
+jar --create --file oop.jar --main-class org.oop.main -C bin .
+作用：
+将所有 class 打包为 hello.jar
+因包含 module-info.class，所以这是一个模块化 JAR
+
+3. 使用 jlink 生成定制 JRE
+jlink --module-path oop.jar --add-modules hello.world --output jre
+作用：
+jlink 根据 hello.world 模块及其依赖（如 java.base、java.xml）
+自动生成最小化可运行 JRE 到 jre/
+
+4. 运行模块
+jre\bin\java --module hello.world
+输出：
+Hello, xml!
