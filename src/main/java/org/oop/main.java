@@ -35,6 +35,14 @@ public class main {
         car.number = 12;//如果用实例访问，编译器会自动给他转为类名
 
 
-
+        CoreStudy cs = new CoreStudy();
+        cs.StringStudy();
+        cs.StringBuilderStudy();
+        cs.PackageTypeStudy();
+        cs.EnumStudy();
+        cs.RecordStudy();
+        cs.BigIntegerStudy();
+        cs.BigDecimalStudy();
+        cs.ToolStudy();
     }
 }
