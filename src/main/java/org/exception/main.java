@@ -41,6 +41,28 @@ public class main {
         finally {
             System.out.println("End");//finally先执行,如果finally里有抛出异常，上面的异常全部失效，因为异常只能有一个被抛出
         }
+
+
+        //断言，对于可恢复的程序错误，不应该使用断言，并且断言只能用于开发和测试阶段
+        //断言一般很少使用，更多使用Junit进行测试
+//可恢复的程序错误
+//        用户输入错误：如用户输入了格式不正确的数据，可以通过提示重新输入来解决
+//        网络临时故障：网络连接中断后可能重新连接，程序可以重试
+//        文件访问冲突：文件被占用时可以等待或选择其他处理方式
+//        资源暂时不可用：如数据库连接池满，可以等待后重试
+//不可恢复的程序错误
+//        逻辑错误：程序设计上的根本性错误，如算法错误
+//        系统资源耗尽：内存严重不足，无法继续执行
+//        严重的数据损坏：关键数据结构被破坏
+//        违反程序前提条件：如数组越界访问、空指针操作
+
+
+        //日志测试
+        LoggerStudy loggerStudy = new LoggerStudy();
+        loggerStudy.test();
+
+        LoggerChild loggerChild = new LoggerChild();
+        loggerChild.testChild();
     }
     static byte[] toGBK(String s) throws UnsupportedEncodingException {//在方法定义处写throws的话就可以让它通过编译
         return s.getBytes("GBK");
