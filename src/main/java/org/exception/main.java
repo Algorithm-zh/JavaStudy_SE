@@ -63,6 +63,7 @@ public class main {
 
         LoggerChild loggerChild = new LoggerChild();
         loggerChild.testChild();
+        loggerStudy.test2();
     }
     static byte[] toGBK(String s) throws UnsupportedEncodingException {//在方法定义处写throws的话就可以让它通过编译
         return s.getBytes("GBK");

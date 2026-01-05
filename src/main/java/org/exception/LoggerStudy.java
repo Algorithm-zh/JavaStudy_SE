@@ -5,6 +5,9 @@ package org.exception;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class LoggerStudy {
     //定义一个静态变量，可以直接使用在静态方法里
     static final Log log = LogFactory.getLog(LoggerStudy.class);
@@ -20,6 +23,13 @@ public class LoggerStudy {
         log2.info("hello world");
         log2.error("error");
     }
+
+    //slf4j代替Common logback代替log4j，这个组合更加的灵活高效.slf4j的接口更加灵活，logback的速度更加高效
+    static final Logger logg = LoggerFactory.getLogger(LoggerStudy.class);
+    public void test2(){
+        logg.info("hello {} I am {}, this is a error", "world", "zhangsan");//SLF4J日志接口的改进,方便了日志的拼接
+    }
+
 }
 class LoggerChild extends LoggerStudy{
     public void testChild(){
