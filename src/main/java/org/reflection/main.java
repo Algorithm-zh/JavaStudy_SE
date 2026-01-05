@@ -7,7 +7,10 @@ package org.reflection;
 
 import org.reflection.ref.Person;
 
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 /*
     反射的原理:
@@ -24,10 +27,11 @@ import java.lang.reflect.InvocationTargetException;
 public class main {
     public static void main(String[] args) {
         Person p = new Person("lisi", 13);
-        try{
+        try {
             ReflectStudy.getFullName(p);
             ReflectStudy.getMethod(p);
-        }catch (ClassNotFoundException | NoSuchFieldException e){
+            ReflectStudy.getConstructor(p);
+        } catch (ClassNotFoundException | NoSuchFieldException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
@@ -35,6 +39,46 @@ public class main {
             throw new RuntimeException(e);
         } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        }
+
+        Hello h = new HelloWorld();
+        h.morning("zhangsan");
+        //有没有可能不编写实现类，直接在运行期创建某个interface的实例呢？
+        //可以，动态代理就可以实现，在运行期动态创建interface实例
+        //需要通过jdk提供的Proxy.newProxyInstance()方法
+        InvocationHandler handler = new InvocationHandler() {
+            @Override
+            public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+                System.out.println(method);
+                if (method.getName().equals("morning")) {
+                    System.out.println("Good Morning, " + args[0]);
+                }
+                return null;
+            }
+        };
+        Hello hello = (Hello) Proxy.newProxyInstance(
+                Hello.class.getClassLoader(),//传入classLoader
+                new Class[]{Hello.class},//传入要实现的接口
+                handler);//传入处理调研方法的
+        hello.morning("Bob");
+    }
+
+    //就是jvm自动帮我们编写了一个实现类类似下面这种
+    /*
+    public class HelloDynamicProxy implements Hello {
+        InvocationHandler handler;
+        public HelloDynamicProxy(InvocationHandler handler) {
+            this.handler = handler;
+        }
+        public void morning(String name) {
+            handler.invoke(
+                    this,
+                    Hello.class.getMethod("morning", String.class),
+                    new Object[] { name }
+            );
         }
     }
+    */
 }

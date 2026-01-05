@@ -1,5 +1,6 @@
 package org.reflection;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -64,6 +65,19 @@ public class ReflectStudy {
         System.out.println(md.invoke(obj));
     }
 
+    static void getConstructor(Object obj) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        Constructor cons = Integer.class.getConstructor(int.class);
+        //调用构造方法Integer(int)
+        Integer n1 = (Integer) cons.newInstance(123);
+        System.out.println(n1);
+
+        //调用构造方法Integer(String)
+        Constructor cons1 = Integer.class.getConstructor(String.class);
+        Integer n2 = (Integer) cons1.newInstance("123");
+        System.out.println(n2);
+
+
+    }
 
 
     //JVM在执行Java程序的时候，并不是一次性把所有用到的class全部加载到内存，而是第一次需要用到class时才加载
