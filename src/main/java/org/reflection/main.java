@@ -24,8 +24,10 @@ public class main {
         Person p = new Person("lisi", 13);
         try{
             ReflectStudy.getFullName(p);
-        }catch (ClassNotFoundException e){
+        }catch (ClassNotFoundException | NoSuchFieldException e){
             e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
     }
 }
