@@ -1,6 +1,8 @@
 package org.reflection;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public class ReflectStudy {
 
@@ -35,6 +37,31 @@ public class ReflectStudy {
         //使用设置字段值设置
         f.set(obj, "wangwu");
         System.out.println(f.get(obj));
+    }
+
+
+    static void getMethod(Object obj) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        Class cls = obj.getClass();
+//        Method getMethod(name, Class...)：获取某个public的Method（包括父类）
+//        Method getDeclaredMethod(name, Class...)：获取当前类的某个Method（不包括父类）
+//        Method[] getMethods()：获取所有public的Method（包括父类）
+//        Method[] getDeclaredMethods()：获取当前类的所有Method（不包括父类）
+        Method md = cls.getMethod("getName");
+        System.out.println("-------------------------------------------");
+        //调用方法
+        var s = md.invoke(obj);//在obj对象上调用方法并获取结果
+        System.out.println(s);
+
+        //调用静态方法
+        Method m = Integer.class.getMethod("parseInt", String.class);
+        Integer n = (Integer) m.invoke(null, "123");
+        System.out.println(n);
+
+        //非public方法
+        Method md1 = cls.getDeclaredMethod("setName", String.class);
+        md1.setAccessible(true);
+        md1.invoke(obj, "hhaha");
+        System.out.println(md.invoke(obj));
     }
 
 

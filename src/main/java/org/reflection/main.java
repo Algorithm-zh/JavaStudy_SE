@@ -7,6 +7,8 @@ package org.reflection;
 
 import org.reflection.ref.Person;
 
+import java.lang.reflect.InvocationTargetException;
+
 /*
     反射的原理:
     java每加载一个类，jvm都会为期创建一个Class类型的实例，并关联起来，这里的Class类型是一个名叫Class的class
@@ -24,9 +26,14 @@ public class main {
         Person p = new Person("lisi", 13);
         try{
             ReflectStudy.getFullName(p);
+            ReflectStudy.getMethod(p);
         }catch (ClassNotFoundException | NoSuchFieldException e){
             e.printStackTrace();
         } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
             throw new RuntimeException(e);
         }
     }
