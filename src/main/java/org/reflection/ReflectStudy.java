@@ -76,7 +76,6 @@ public class ReflectStudy {
         Integer n2 = (Integer) cons1.newInstance("123");
         System.out.println(n2);
 
-
     }
 
 
