@@ -1,6 +1,7 @@
 package org.generic;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 //泛型类
 //可以设定extends来限制T类型，让其只能是某种类型或其子类
@@ -10,6 +11,13 @@ public class Pair<T extends Object,  U> {
     public Pair(T first, U last) {
         this.first = first;
 //        this.first = new T(); 无法实例化T类型，可以通过下面反射的方式实现
+        //不能实例化的原因：
+        /*
+            运行时他不知道他是啥类型，因为都被擦除成了Object类型(或自己设定的类上限)
+            1.构造函数可能不能访问
+            2.T可能是接口或者抽象类
+            3.T可能没有
+         */
         this.last = last;
     }
     //通过反射实现实例化
@@ -20,6 +28,12 @@ public class Pair<T extends Object,  U> {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    //supplier就是一个能创建对象的方法
+    // 使用 Supplier 的构造方法
+    public Pair(Supplier<T> firstSupplier, Supplier<U> lastSupplier) {
+        this.first = firstSupplier.get();  // 调用 Supplier 来创建实例
+        this.last = lastSupplier.get();
     }
 
     public T getFirst() {

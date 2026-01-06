@@ -60,10 +60,26 @@ public class main {
         Pair<String, Integer> p = Pair.makePair("mojap", 18);
         System.out.println(p);
 
+        //使用反射实例化泛型
         Pair<String, Person> p2 = new Pair(String.class, Person.class);
         p2.setFirst("mojap");
         p2.setLast(ps[0]);
         System.out.println(p2);
+
+        //使用suppiler实例化泛型
+        //它干了什么
+        // Supplier<String> 就是一个能创建 String 的方法
+        /*
+        Supplier<String> supplier1 = new Supplier<String>() {
+            @Override
+            public String get() {
+                return new String();  // 创建 String 对象
+            }
+        };
+        */
+        Pair<String, Person> p3 = new Pair<>(()->"haha", ()->ps[0]);
+        System.out.println(p3);
+        System.out.println("-------------------p3-------------------------");
 
 
         //子类获取父类泛型类型(正常情况不可以通过反射得出T的类型，但是子类可以获取父类的)
