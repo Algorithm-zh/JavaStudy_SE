@@ -78,5 +78,8 @@ public class main {
             Class<?> typeClass = (Class<?>) firstType;
             System.out.println(typeClass); // Integer
         }
+
+        //通配符部分
+        System.out.println(PairHelper.add(new Pair<Integer, Integer>(1, 2)));
     }
 }
