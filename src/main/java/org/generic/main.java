@@ -79,7 +79,24 @@ public class main {
             System.out.println(typeClass); // Integer
         }
 
+
         //通配符部分
-        System.out.println(PairHelper.add(new Pair<Integer, Integer>(1, 2)));
+        System.out.println(PairHelper.get(new Pair<Integer, Integer>(1, 2)));
+        PairHelper.add(new Pair<Number, Object>(1, "hello"));
+
+        //使用实例
+        List<Integer>list1 = Arrays.asList(1, 2, 3, 4);
+        List<Number>list2 = new ArrayList<>();
+        PairHelper.copy(list1, list2);
+        System.out.println(list2);
+
+        //所以使用场景总结一下就是：
+//        1.生产者消费者场景
+//        2.泛型的多态，正常使用T下面这个是编译无法通过的
+        // 同一个处理器可以处理多种输入类型
+        //  NumberProcessor processor = new NumberProcessor();
+        //  processor.process(listOfIntegers);  // List<Integer>
+        //  processor.process(listOfDoubles);   // List<Double>
+        //  processor.process(listOfNumbers);   // List<Number>
     }
 }
