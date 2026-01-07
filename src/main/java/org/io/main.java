@@ -23,5 +23,7 @@ public class main {
         StreamStudy.OutputStreamTest();
         StreamStudy.FilterStreamTest();
         SerializeStudy.test();
+        ReaderWriterStudy.ReaderTest();
+        ReaderWriterStudy.PrintWriterTest();
     }
 }
