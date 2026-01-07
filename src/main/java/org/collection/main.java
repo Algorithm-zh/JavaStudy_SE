@@ -7,5 +7,8 @@ public class main {
         ListStudy.test();
         MapStudy.test();
         SetStudy.test();
+        QueueStudy.test();
+        IteratorStudy.test();
+        CollectionsStudy.test();
     }
 }
