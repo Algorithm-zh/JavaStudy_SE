@@ -17,10 +17,11 @@ import java.io.IOException;
     上面这都是同步IO，同步IO是指，每次调用read()或write()方法时，程序会阻塞，等待数据被处理。同步IO的效率较低，但是简单易用。
  */
 public class main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
         FileStudy.test();
         StreamStudy.InputStreamTest();
         StreamStudy.OutputStreamTest();
         StreamStudy.FilterStreamTest();
+        SerializeStudy.test();
     }
 }
