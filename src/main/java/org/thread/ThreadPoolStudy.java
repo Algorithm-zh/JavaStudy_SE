@@ -108,6 +108,40 @@ public class ThreadPoolStudy {
         Thread.sleep(1000);
     }
 
+    //测试ThreadLocal
+    @Test
+    public void test6() throws InterruptedException {
+        ExecutorService es = Executors.newFixedThreadPool(4);
+        Runnable task = () -> {
+            UserContext us = new UserContext();
+            us.add("张三");
+            System.out.println(queryThreadLocal());
+        };
+        es.submit(task);
+        Thread.sleep(1000);
+        es.shutdown();
+    }
+
+    //虚拟线程 java19开始使用，一个线程就可以使用成百上千的虚拟线程
+    //一旦虚拟线程执行一个io操作进入等待的时候，会被立即挂起执行别的虚拟线程，什么时候io数据返回了才会被再次调用
+    //所以它非常适合io密集型操作
+    @Test
+    public void test7(){
+        //创建方式一：直接创建虚拟线程并运行
+        Thread th = Thread.startVirtualThread(() -> System.out.println("hello world1"));
+        //创建方式二：创建虚拟线程但是不运行，自己调用start
+        Thread th1 = Thread.ofVirtual().unstarted(() -> System.out.println("hello world2"));
+        th1.start();;
+        //创建方式三：通过虚拟线程的ThreadFactory创建虚拟线程，手动调用start
+        ThreadFactory tf = Thread.ofVirtual().factory();
+        Thread th2 = tf.newThread(() -> System.out.println("hello world3"));
+        th2.start();
+    }
+
+    static String queryThreadLocal(){
+        return UserContext.currentUser();
+    }
+
     static String queryCode(String name) {
         try {
             Thread.sleep(100);
@@ -161,5 +195,24 @@ class Task2 implements Callable<String>{
     @Override
     public String call() throws Exception {
         return name;
+    }
+}
+
+//把ThreadLocal封装起来，然后实现AutoCloseable接口，使用try resource，就可以自动释放ThreadLocal
+//如果不释放的话，这个线程有可能会被会回收到线程池里，而threadLocal会被带到下一次的线程里
+//把某个线程用到的全部上下文都放到这里面
+class UserContext implements AutoCloseable{
+    static final ThreadLocal<String> ctx = new ThreadLocal<>();
+
+    public void add(String user){
+        ctx.set(user);
+    }
+    public static String currentUser(){
+        return ctx.get();
+    }
+
+    @Override
+    public void close() throws Exception {
+        ctx.remove();
     }
 }
