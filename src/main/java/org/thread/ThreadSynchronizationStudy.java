@@ -4,10 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -79,6 +78,47 @@ public class ThreadSynchronizationStudy {
         }
     }
 
+    //测试线程安全集合类
+/*
+    interface	non-thread-safe	        thread-safe
+    List	    ArrayList	            CopyOnWriteArrayList
+    Map	        HashMap	                ConcurrentHashMap
+    Set	        HashSet / TreeSet	    CopyOnWriteArraySet
+    Queue	    ArrayDeque / LinkedList	ArrayBlockingQueue / LinkedBlockingQueue
+    Deque	    ArrayDeque / LinkedList	LinkedBlockingDeque
+ */
+    @Test
+    public void test3() throws InterruptedException {
+        Map<Integer, String> map = new ConcurrentHashMap<>();
+        Thread th = new Thread(() -> {
+           for (int i = 0; i < 10; i++){
+               map.put(i, "value" + i);
+           }
+        });
+        th.start();
+        Thread th2 = new Thread(() -> {
+            for (int i = 0; i < 10; i++){
+                System.out.println(map.get(i));
+            }
+        });
+        th2.start();
+        th.join();
+        th2.join();
+    }
+
+
+    //java Atomic实现方式
+    //CAS:Compare And Set
+    //如果当前值是prev,那就更新为next,返回为true，如果不是prev,就啥也不干，返回false
+    public int incrementAndGet(AtomicInteger var){
+        int prev, next;
+        do{
+            prev = var.get();
+            next = prev + 1;
+        }while(!var.compareAndSet(prev, next));
+        return next;
+    }
+
 
 }
 //将synchronized封装起来,这个类就变成了一个线程安全的类
@@ -119,6 +159,7 @@ class TaskQueue{
             //只能在锁对象上调用wait()方法。因为在getTask()中，我们获得了this锁，因此，只能在this对象上调用wait()方法
             this.wait();//线程从等待状态被其他线程唤醒后，wait()方法才会返回，然后，继续执行下一条语句
         }
+//        cpp不需要这么麻烦，可以直接cond.wait(lock, [](){return !q.isEmpty();}); //一句话的事
         return q.remove();
     }
 }
