@@ -55,7 +55,7 @@ public class ReflectStudy {
 
         //调用静态方法
         Method m = Integer.class.getMethod("parseInt", String.class);
-        Integer n = (Integer) m.invoke(null, "123");
+        Integer n = (Integer) m.invoke(null, "123");//如果调用的方法是静态方法，则第一个参数可以设为null
         System.out.println(n);
 
         //非public方法
