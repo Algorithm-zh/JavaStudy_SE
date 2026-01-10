@@ -9,10 +9,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.stream.DoubleStream;
-import java.util.stream.IntStream;
-import java.util.stream.LongStream;
-import java.util.stream.Stream;
+import java.util.stream.*;
 
 public class StreamStudy {
     /*
@@ -41,6 +38,9 @@ public class StreamStudy {
             .limit(100) // 任意个转换 不计算
             .sum(); // 最终计算结果 计算 ,上面只存储了转换规则，没有任何计算
      */
+    //Stream主要有两类操作，转换和聚合，区分，转换不会触发任何计算
+    //聚合操作是真正需要从Stream请求数据的，对一个Stream做聚合计算后，结果就不是一个Stream，而是一个其他的Java对象。
+
 
     //创建Stream
     @Test
@@ -127,6 +127,69 @@ public class StreamStudy {
                     return m;
                 });
         map.forEach((k, v)->System.out.println(k + "=" + v));
+    }
+
+
+    //输出集合
+    @Test
+    public void test5(){
+        //1.输出为List
+        Stream<String> stream = Stream.of("Apple", "Orange", "", null, "Lemon");
+        List<String> list = stream.filter((s) -> s != null && !s.isBlank()).collect(Collectors.toList());
+        System.out.println(list);
+
+        //2.输出为map
+        Stream<String> stream1 = Stream.of("APPLE:apple", "MSFT:Microsoft");
+        Map<String, String> map = stream1.collect(Collectors.toMap(s -> s.split(":")[0], s -> s.split(":")[1]));
+        System.out.println(map);
+
+        //3.输出为数组
+        List<String> list2 = List.of("Apple", "Banana", "Orange");
+        String[] array = list.stream().map(String::toLowerCase).toArray(String[]::new);
+        System.out.println(Arrays.toString(array));
+    }
+
+    //输出集合：分组输出
+    @Test
+    public void test6(){
+        List<String> list = List.of("Apple", "Banana", "Blackberry", "Coconut", "Avocado", "Cherry", "Apricots");
+        //分组输出使用Collectors.groupingBy()，它需要提供两个函数：一个是分组的key，这里使用s -> s.substring(0, 1)，
+        //表示只要首字母相同的String分到一组，第二个是分组的value，这里直接使用Collectors.toList()，表示输出为List
+        Map<String, List<String>> collect = list.stream().collect(Collectors.groupingBy(s -> s.substring(0, 1), Collectors.toList()));
+        System.out.println(collect);
+    }
+
+    //其它操作
+    @Test
+    public void test7(){
+        //排序
+        List<String> list = List.of("Orange", "apple", "Banana");
+        List<String> list1 = list.stream().sorted().collect(Collectors.toList());
+        System.out.println(list1);
+        //去重
+        List<String> list2 = list.stream().distinct().collect(Collectors.toList());
+        System.out.println(list2);
+        //截取
+        List<String> list3 = list.stream().skip(1).limit(1).collect(Collectors.toList());
+        System.out.println(list3);
+        //flatMap:是指把Stream的每个元素（这里是List）映射为Stream，然后合并成一个新的Stream
+        Stream<List<Integer>> s = Stream.of(
+                Arrays.asList(1, 2, 3),
+                Arrays.asList(4, 5, 6),
+                Arrays.asList(7, 8, 9));
+        Stream<Integer> i = s.flatMap(l -> l.stream());
+        i.forEach(n -> System.out.print(n + " "));
+        System.out.println();
+        //合并，将两个stream合起来
+        Stream<String> s1 = List.of("A", "B", "C").stream();
+        Stream<String> s2 = List.of("D", "E").stream();
+        Stream<String> ss = Stream.concat(s1, s2);
+        System.out.println(ss.collect(Collectors.toList())); // [A, B, C, D, E]
+        //并行
+        //通常情况下，对Stream的元素进行处理是单线程的，即一个一个元素进行处理。但是很多时候，我们希望可以并行处理Stream的元素，因为在元素数量非常大的情况，并行处理可以大大加快处理速度。
+        String[] array = list.stream().parallel().sorted().toArray(String[]::new);
+        System.out.println(Arrays.toString(array));
+
     }
 }
 
