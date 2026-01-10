@@ -33,13 +33,7 @@ public class main {
             ReflectStudy.getConstructor(p);
         } catch (ClassNotFoundException | NoSuchFieldException e) {
             e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException(e);
-        } catch (InvocationTargetException e) {
-            throw new RuntimeException(e);
-        } catch (InstantiationException e) {
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
 
@@ -48,7 +42,7 @@ public class main {
         //有没有可能不编写实现类，直接在运行期创建某个interface的实例呢？
         //可以，动态代理就可以实现，在运行期动态创建interface实例
         //需要通过jdk提供的Proxy.newProxyInstance()方法
-        InvocationHandler handler = new InvocationHandler() {
+        InvocationHandler handler = new InvocationHandler() {//拦截处理器。拦截方法调用
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                 System.out.println(method);
@@ -58,6 +52,7 @@ public class main {
                 return null;
             }
         };
+        //创建动态代理对象（运行时创建）
         Hello hello = (Hello) Proxy.newProxyInstance(
                 Hello.class.getClassLoader(),//传入classLoader
                 new Class[]{Hello.class},//传入要实现的接口
